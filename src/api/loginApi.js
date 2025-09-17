@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { encrypt, decrypt } from '@/utils/jsencrypt';
+import { encrypt, decrypt } from '@/utils/rsaUtil';
 
 // 登录方法
 export function login(username, password, code, uuid) {
@@ -61,3 +61,10 @@ export function getCodeImg() {
     timeout: 20000,
   });
 }
+
+// 获取路由
+export const getRouters = () =>
+  request({
+    url: '/getRouters',
+    method: 'get',
+  });

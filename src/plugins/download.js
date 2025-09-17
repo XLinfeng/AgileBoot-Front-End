@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { saveAs } from 'file-saver';
-import { getToken } from '@/utils/auth';
+import { getToken } from '@/utils/token';
 import errorCode from '@/utils/errorCode';
-import { blobValidate } from '@/utils/ruoyi';
+import { isBlobData } from '@/utils/common';
 
 const baseURL = import.meta.env.VITE_APP_BASE_API;
 
@@ -16,7 +16,7 @@ export default {
       responseType: 'blob',
       headers: { Authorization: `Bearer ${getToken()}` },
     }).then(async (res) => {
-      const isLogin = await blobValidate(res.data);
+      const isLogin = await isBlobData(res.data);
       if (isLogin) {
         const blob = new Blob([res.data]);
         this.saveAs(blob, decodeURI(res.headers['download-filename']));
@@ -26,14 +26,14 @@ export default {
     });
   },
   zip(url, name) {
-    var url = baseURL + url;
+    const fullURL = baseURL + url;
     axios({
       method: 'get',
-      url,
+      fullURL,
       responseType: 'blob',
       headers: { Authorization: `Bearer ${getToken()}` },
     }).then(async (res) => {
-      const isLogin = await blobValidate(res.data);
+      const isLogin = await isBlobData(res.data);
       if (isLogin) {
         const blob = new Blob([res.data], { type: 'application/zip' });
         this.saveAs(blob, name);

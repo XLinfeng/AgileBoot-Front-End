@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { parseStrEmpty } from '@/utils/ruoyi';
+import { parseStrEmpty } from '@/utils/common';
 
 // 查询用户列表
 export function listUser(query) {
@@ -37,7 +37,7 @@ export function updateUser(data) {
 }
 
 // 删除用户
-export function delUser(userId) {
+export function deleteUser(userId) {
   return request({
     url: `/system/user/${userId}`,
     method: 'delete',
@@ -45,7 +45,7 @@ export function delUser(userId) {
 }
 
 // 用户密码重置
-export function resetUserPwd(userId, password) {
+export function resetUserPassword(userId, password) {
   const data = {
     userId,
     password,
@@ -88,7 +88,7 @@ export function updateUserProfile(data) {
 }
 
 // 用户密码重置
-export function updateUserPwd(oldPassword, newPassword) {
+export function updateUserPassword(oldPassword, newPassword) {
   const data = {
     oldPassword,
     newPassword,
@@ -104,25 +104,10 @@ export function updateUserPwd(oldPassword, newPassword) {
 export function uploadAvatar(data) {
   return request({
     url: '/system/user/profile/avatar',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
     method: 'post',
     data,
-  });
-}
-
-// 查询授权角色
-export function getAuthRole(userId) {
-  return request({
-    url: `/system/user/${userId}/role/`,
-    method: 'get',
-  });
-}
-
-// 保存授权角色
-export function updateAuthRole(data) {
-  const { userId } = data.userId;
-  return request({
-    url: `/system/user/${userId}/role/`,
-    method: 'put',
-    params: data,
   });
 }

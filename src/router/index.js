@@ -82,19 +82,6 @@ export const constantRoutes = [
     ],
   },
   {
-    path: '/system/user-auth',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'role/:userId(\\d+)',
-        component: () => import('@/views/system/user/authRole'),
-        name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' },
-      },
-    ],
-  },
-  {
     path: '/system/role-auth',
     component: Layout,
     hidden: true,
@@ -104,19 +91,6 @@ export const constantRoutes = [
         component: () => import('@/views/system/role/authUser'),
         name: 'AuthUser',
         meta: { title: '分配用户', activeMenu: '/system/role' },
-      },
-    ],
-  },
-  {
-    path: '/system/dict-data',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'index/:dictId(\\d+)',
-        component: () => import('@/views/system/dict/data'),
-        name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' },
       },
     ],
   },

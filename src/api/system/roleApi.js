@@ -67,7 +67,7 @@ export function deleteRole(roleId) {
 }
 
 // 查询角色已授权用户列表
-export function allocatedUserList(query) {
+export function getRoleAssignedUserList(query) {
   const { roleId } = query;
   return request({
     url: `/system/role/${roleId}/allocated/list`,
@@ -77,22 +77,12 @@ export function allocatedUserList(query) {
 }
 
 // 查询角色未授权用户列表
-export function unallocatedUserList(query) {
+export function getRoleUnassignedUserList(query) {
   const { roleId } = query;
   return request({
     url: `/system/role/${roleId}/unallocated/list`,
     method: 'get',
     params: query,
-  });
-}
-
-// 取消用户授权角色  弃用
-export function deleteRoleOfUser(data) {
-  const { roleId, userIds } = data;
-  return request({
-    url: `/system/role/users/${userIds}/grant`,
-    method: 'delete',
-    data,
   });
 }
 

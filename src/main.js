@@ -21,12 +21,11 @@ import 'virtual:svg-icons-register';
 import SvgIcon from '@/components/SvgIcon';
 import elementIcons from '@/components/SvgIcon/svgicon';
 
-import './permission'; // permission control
+import './router/interceptor'; // permission control
 
-import { useDict } from '@/utils/dict';
-import {
-  parseTime, resetForm, addDateRange, addTimeRange, handleTree, selectDictLabel,
-} from '@/utils/ruoyi';
+import { resetForm, addTimeRange, handleTree } from '@/utils/common';
+import { useDict, selectDictLabel } from '@/utils/dict';
+import { parseTime } from '@/utils/dateUtil';
 
 // 分页组件
 import Pagination from '@/components/Pagination';
@@ -51,7 +50,6 @@ app.config.globalProperties.download = download;
 app.config.globalProperties.parseTime = parseTime;
 app.config.globalProperties.resetForm = resetForm;
 app.config.globalProperties.handleTree = handleTree;
-app.config.globalProperties.addDateRange = addDateRange;
 app.config.globalProperties.addTimeRange = addTimeRange;
 app.config.globalProperties.selectDictLabel = selectDictLabel;
 

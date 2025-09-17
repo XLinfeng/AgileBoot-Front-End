@@ -5,7 +5,8 @@
       <el-form-item prop="username">
         <el-input
           v-model="registerForm.username"
-          type="text"
+          link
+          type="primary"
           size="large"
           auto-complete="off"
           placeholder="账号"
@@ -34,7 +35,7 @@
           placeholder="确认密码"
           @keyup.enter="handleRegister"
         >
-      <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
+          <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
         </el-input>
       </el-form-item>
       <el-form-item prop="code" v-if="isCaptchaOn">
@@ -49,36 +50,30 @@
           <template #prefix><svg-icon icon-class="validCode" class="el-input__icon input-icon" /></template>
         </el-input>
         <div class="register-code">
-          <img :src="codeUrl" @click="getCode" class="register-code-img"/>
+          <img :src="codeUrl" @click="getCode" class="register-code-img" />
         </div>
       </el-form-item>
-      <el-form-item style="width:100%;">
-        <el-button
-          :loading="loading"
-          size="large"
-          type="primary"
-          style="width:100%;"
-          @click.prevent="handleRegister"
-        >
+      <el-form-item style="width: 100%">
+        <el-button :loading="loading" size="large" type="primary" style="width: 100%" @click.prevent="handleRegister">
           <span v-if="!loading">注 册</span>
           <span v-else>注 册 中...</span>
         </el-button>
-        <div style="float: right;">
+        <div style="float: right">
           <router-link class="link-type" :to="'/login'">使用已有账户登录</router-link>
         </div>
       </el-form-item>
     </el-form>
     <!--  底部  -->
     <div class="el-register-footer">
-      <span>Copyright © 2018-2022 ruoyi.vip All Rights Reserved.</span>
+      <span>Copyright © 2018-2022 Agileboot All Rights Reserved.</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ElMessageBox } from 'element-plus';
-import { getCodeImg, register } from '@/api/login';
-
+// import { getCodeImg, register } from '@/api/loginApi';
+import * as loginApi from '@/api/loginApi';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
@@ -102,13 +97,19 @@ const registerRules = {
   username: [
     { required: true, trigger: 'blur', message: '请输入您的账号' },
     {
-      min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur',
+      min: 2,
+      max: 20,
+      message: '用户账号长度必须介于 2 和 20 之间',
+      trigger: 'blur',
     },
   ],
   password: [
     { required: true, trigger: 'blur', message: '请输入您的密码' },
     {
-      min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur',
+      min: 5,
+      max: 20,
+      message: '用户密码长度必须介于 5 和 20 之间',
+      trigger: 'blur',
     },
   ],
   confirmPassword: [
@@ -126,26 +127,31 @@ function handleRegister() {
   proxy.$refs.registerRef.validate((valid) => {
     if (valid) {
       loading.value = true;
-      register(registerForm.value).then((res) => {
-        const { username } = registerForm.value;
-        ElMessageBox.alert(`<font color='red'>恭喜你，您的账号 ${username} 注册成功！</font>`, '系统提示', {
-          dangerouslyUseHTMLString: true,
-          type: 'success',
-        }).then(() => {
-          router.push('/login');
-        }).catch(() => {});
-      }).catch(() => {
-        loading.value = false;
-        if (isCaptchaOn) {
-          getCode();
-        }
-      });
+      loginApi
+        .register(registerForm.value)
+        .then((res) => {
+          const { username } = registerForm.value;
+          ElMessageBox.alert(`<font color='red'>恭喜你，您的账号 ${username} 注册成功！</font>`, '系统提示', {
+            dangerouslyUseHTMLString: true,
+            type: 'success',
+          })
+            .then(() => {
+              router.push('/login');
+            })
+            .catch(() => {});
+        })
+        .catch(() => {
+          loading.value = false;
+          if (isCaptchaOn) {
+            getCode();
+          }
+        });
     }
   });
 }
 
 function getCode() {
-  getCodeImg().then((res) => {
+  loginApi.getCodeImg().then((res) => {
     isCaptchaOn.value = res.isCaptchaOn === undefined ? true : res.isCaptchaOn;
     if (isCaptchaOn.value) {
       codeUrl.value = `data:image/gif;base64,${res.img}`;
@@ -157,13 +163,13 @@ function getCode() {
 getCode();
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .register {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
+  background-image: url('../assets/images/login-background.jpg');
   background-size: cover;
 }
 .title {
